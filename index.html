@@ -5,10 +5,15 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/loading.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="landing is-preload">
-
+		<div id="loading">
+			<section id = "loading-section" class="wrapper dark" alt = "Loading indicator">
+					<div class="loader">SECUREKIM...</div>
+			</section>
+		</div>
 		<!-- Page Wrapper -->
 			<div id="page-wrapper">
 
@@ -198,6 +203,10 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
+			<script type="text/javascript">
+			$(document).ready(function() {  
+				 $('#loading').fadeOut();  
+				});
+			</script>
 	</body>
 </html>
