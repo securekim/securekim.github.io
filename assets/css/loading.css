@@ -181,7 +181,7 @@
         font-family: helvetica, arial, sans-serif;
         text-transform: uppercase;
         font-weight: 900;
-        color: rgb(51, 144, 206);
+        color: #2e3842;
         letter-spacing: 0.2em;
       }
       .loader::before, .loader::after {
@@ -189,7 +189,7 @@
         display: block;
         width: 15px;
         height: 15px;
-        background: #3177f8;
+        background: #2e3842;
         position: absolute;
         -webkit-animation: load .7s infinite alternate ease-in-out;
                 animation: load .7s infinite alternate ease-in-out;
