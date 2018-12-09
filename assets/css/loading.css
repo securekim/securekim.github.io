@@ -4,10 +4,10 @@
     box-sizing: border-box;
   }
   
-  section.wrapper {
+  loading.loading-wrapper {
     padding: 40px 0;
   }
-  section.wrapper.dark {
+  loading.loading-wrapper.dark {
     background: #313134;
   }
   
@@ -165,7 +165,7 @@
     z-index: 99;  
     text-align: center; } 
      
-   #loading-section {  
+   #loading-loading {  
     z-index: 100; }
    
     .loader {
