@@ -1,0 +1,198 @@
+<html>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<style>textarea { text-transform: uppercase; }</style>
+<body>
+<center>
+<h1>고려대 정보보호이론 정익래 교수님 과제 - 2020572008 김병연</h1>
+		<h3>Substitution cipher</h3>
+		<textarea oninput="drawGraph1()" id ="text" style="word-break:break-all; width:50%" rows="3">LIVITCSWPIYVEWHEVSRIQMXLEYVEOIEWHRXEXIPFEMVEWHKVSTYLXZIXLIKIIXPIJVSZEYPERRGERIMWQLMGLMXQERIWGPSRIHMXQEREKIETXMJTPRGEVEKEITREWHEXXLEXXMZITWAWSQWXSWEXTVEPMRXRSJGSTVRIEYVIEXCVMUIMWERGMIWXMJMGCSMWXSJOMIQXLIVIQIVIXQSVSTWHKPEGARCSXRWIEVSWIIBXVIZMXFSJXLIKEGAEWHEPSWYSWIWIEVXLISXLIVXLIRGEPIRQIVIIBGIIHMWYPFLEVHEWHYPSRRFQMXLEPPXLIECCIEVEWGISJKTVWMRLIHYSPHXLIQIMYLXSJXLIMWRIGXQEROIVFVIZEVAEKPIEWHXEAMWYEPPXLMWYRMWXSGSWRMHIVEXMSWMGSTPHLEVHPFKPEZINTCMXIVJSVLMRSCMWMSWVIRCIGXMWYMX</textarea>
+<div style="width:50%;">
+		<canvas id="canvas1"></canvas>
+	</div>
+		<h3>Key - Cipher to Plain</h3>
+	<p><textarea id ="alphabet" oninput="drawGraphs()" style="word-break:break-all; " cols="26" rows="1">ETAOINSHRDLCUMWFGYPBVKJQXZ</textarea></p>
+	<p>
+	<textarea id ="key" maxlength="26" oninput="drawGraph2()" style="word-break:break-all;" cols="26" rows="1">AUKVEJODS?HPZINYCGLXRBFWTM</textarea></p>
+<div style="width:50%;">
+		<canvas id="canvas2"></canvas>
+	</div>
+	<h3>Plain Text</h3>
+	<textarea readonly="readonly" id ="result" style="word-break:break-all; width:50%" rows="3"></textarea>
+</center>
+	</body>
+<script>
+//예제가 별로군
+//ETAOINSHRDLCUMWFGYPBVKJQXZ   //CIPHER
+//????E?????????????????????
+//AUKVEJODS?HPZINYCGLXRBFWTM   //PLAIN
+
+window.chartColors = {
+  red: 'rgb(255, 99, 132)',
+  orange: 'rgb(255, 159, 64)',
+  yellow: 'rgb(255, 205, 86)',
+  green: 'rgb(75, 192, 192)',
+  blue: 'rgb(54, 162, 235)',
+  purple: 'rgb(153, 102, 255)',
+  grey: 'rgb(201, 203, 207)'
+};
+	
+var ctx = document.getElementById('canvas1').getContext('2d');
+var ctx2 = document.getElementById('canvas2').getContext('2d');
+var config1;
+var config2;
+var chart1;
+var chart2;
+const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const ALPHA_FREQ = {
+A:8.2,
+B:1.5,
+C:2.8,
+D:4.3,
+E:12.7,
+F:2.2,
+G:2.0,
+H:6.1,
+I:7.0,
+J:0.02,
+K:0.08,
+L:4.0,
+M:2.4,
+N:6.7,
+O:7.5,
+P:1.9,
+Q:0.01,
+R:6.0,
+S:6.3,
+T:9.1,
+U:2.8,
+V:1.0,
+W:2.3,
+X:0.01,
+Y:2.0,
+Z:0.01
+}
+
+drawGraph1 = () => {
+	
+	alphabet = document.getElementById('alphabet').value.toUpperCase().split('');
+	cipher = document.getElementById("text").value.toUpperCase();
+	cipher = cipher.split('');
+	
+	frequencyNorm = []
+	frequencyAlpha = {};
+	frequencyArr = [];
+	
+	alphabet.forEach(myAlpha => {
+		frequencyAlpha[myAlpha] = 0; // init
+		frequencyNorm.push(ALPHA_FREQ[myAlpha]) // init frequencyNorm
+	}); 
+	cipher.forEach(freq => {frequencyAlpha[freq]++}); // frequency to JSON
+
+	for(var i in alphabet){
+	frequencyAlpha[alphabet[i]] *= 100/ cipher.length;
+	frequencyArr = Object.values(frequencyAlpha);
+	frequencyAlpha[alphabet[i]] = frequencyArr[i];
+	} //frequency to Array
+	
+	config1 = {
+			type: 'bar',
+			data: {
+				labels: alphabet,
+				datasets: [{
+					label: 'Cipher',
+					fill: false,
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: frequencyArr
+				}, {
+					label: 'Normal',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: frequencyNorm,
+				}]
+			},
+			options: {
+				responsive: true
+			}
+		};	
+	if(chart1) chart1.destroy();
+	chart1 = new Chart(ctx, config1);
+}
+
+
+drawGraph2 = () => {
+	alphabet = document.getElementById('alphabet').value.toUpperCase().split('');
+	console.log("drawGraph2");
+	cipher = document.getElementById("text").value.toUpperCase();
+	key = document.getElementById("key").value.toUpperCase();
+	
+	match = {}
+	frequencyNorm = []
+	frequencyAlpha = {};
+	frequencyArr = [];
+	
+	//if(key.length != 26) return;
+	
+	for(var i in key){
+		match[alphabet[i]] = key[i];
+	}
+	cipher = cipher.split("");
+	for(var i in cipher){
+		cipher[i] = match[cipher[i]];
+	}
+	
+	console.log(cipher);
+	console.log(match);
+	alphabet.forEach(myAlpha => {
+		frequencyAlpha[myAlpha] = 0;
+		frequencyNorm.push(ALPHA_FREQ[myAlpha]) // init frequencyNorm
+	}); // init
+	cipher.forEach(freq => {frequencyAlpha[freq]++}); // frequency to JSON
+
+	console.log(frequencyAlpha);
+
+	for(var i in alphabet){
+	frequencyAlpha[alphabet[i]] *= 100/ cipher.length;
+	frequencyArr = Object.values(frequencyAlpha);
+	frequencyAlpha[alphabet[i]] = frequencyArr[i];
+	} //frequency to Array
+	
+config2 = {
+			type: 'bar',
+			data: {
+				labels: alphabet,
+				datasets: [{
+					label: 'Plain',
+					fill: false,
+					backgroundColor: window.chartColors.orange,
+					borderColor: window.chartColors.orange,
+					data: frequencyArr
+				}, {
+					label: 'Normal',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: frequencyNorm,
+				}]
+			},
+			options: {
+			}
+		};
+	
+	if(chart2) chart2.destroy();
+	chart2 = new Chart(ctx2, config2);
+	
+	document.getElementById("result").value = cipher.join('');
+	
+}
+drawGraphs = () =>{
+	drawGraph1();
+	drawGraph2();
+}
+drawGraphs();
+
+///////////////////////////////////////////////////////
+
+</script>
+</html>
